@@ -1,0 +1,139 @@
+Answer5: -
+
+create table routes  (id INT PRIMARY KEY , name VARCHAR(250), number VARCHAR(250));
+INSERT INTO routes (id, name, number)
+VALUES (1, '200-D', 'SBV-BHJ'), (2, '300-A', 'ASD-WE');
+CREATE TABLE route_points (id INT PRIMARY KEY , route_id INT , orders INT , distance INT, FOREIGN KEY (route_id) REFERENCES routes(id));  
+INSERT INTO route_points (id, route_id, orders, distance)
+VALUES 
+  (1, 1, 1, 0),
+  (2, 1, 2, 100),
+  (3, 2, 1, 0),
+  (4, 2, 2, 50),
+  (5, 2, 3, 100);
+
+
+
+SELECT
+  rp.route_id,
+  r.name,
+  SUM(rp.distance) AS total_distance
+FROM
+  route_points rp
+JOIN
+  routes r ON rp.route_id = r.id
+GROUP BY
+  rp.route_id, r.name
+ORDER BY
+  total_distance DESC;
+  
+  CREATE TABLE station (
+  id INT PRIMARY KEY,
+  station_name VARCHAR(255)
+);
+
+
+
+
+
+
+
+
+
+
+
+
+Answer6: -
+
+
+CREATE TABLE times (
+  id INT PRIMARY KEY,
+  station_id INT,
+  slot INT,
+  time TIME,
+  FOREIGN KEY (station_id) REFERENCES station(id)
+);
+
+INSERT INTO station (id, station_name)
+VALUES
+  (1, 'STA 1'),
+  (2, 'STB 2');
+
+INSERT INTO times (id, station_id, slot, time)
+VALUES
+  (1, 1, 1, '6:30'),
+  (2, 1, 2, '6:45'),
+  (3, 1, 1, '7:40'),
+  (4, 1, 2, '7:25'),
+  (5, 2, 1, '6:40'),
+  (6, 2, 2, '6:50'),
+  (7, 2, 1, '7:50'),
+  (8, 2, 2, '8:15');
+  
+
+
+  SELECT
+  t.station_id,
+  s.station_name,
+  t.slot,
+  t.time
+FROM
+  times t
+JOIN
+  station s ON t.station_id = s.id
+WHERE
+  t.slot = 1 AND t.time < '07:45'
+ORDER BY
+  t.time;
+
+
+
+
+
+
+
+
+
+Answer7: -
+
+
+
+  CREATE TABLE routes1 (
+  id INT PRIMARY KEY,
+  name VARCHAR(255),
+  number VARCHAR(255)
+);
+
+CREATE TABLE route1_points (
+  id INT PRIMARY KEY,
+  route_id INT,
+  order_num INT,
+  station_id INT,
+  stop_id INT
+);
+
+INSERT INTO routes1 (id, name, number)
+VALUES
+  (1, '200-D', 'SBV-BHJ'),
+  (2, '300-D', 'ASD-WER');
+  
+  INSERT INTO route1_points (id, route_id, order_num, station_id, stop_id)
+VALUES
+  (1, 1, 1, 1, 1),
+  (2, 1, 2, 1, 2),
+  (3, 2, 1, 1, 1),
+  (4, 2, 2, 1, 2),
+  (5, 2, 3, 1, 3);
+  
+
+
+  SELECT
+  r.id AS route_id,
+  rp1.stop_id AS source_stop_id,
+  rp2.stop_id AS dest_stop_id
+FROM
+  routes1 r
+JOIN
+  route1_points rp1 ON r.id = rp1.route_id AND rp1.order_num = 1
+JOIN
+  route1_points rp2 ON r.id = rp2.route_id AND rp2.order_num = 2;
